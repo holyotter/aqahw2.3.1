@@ -29,26 +29,18 @@ public class TestOrderForm {
     }
 
     @Test
-    public void shouldAccepted() {
-        $("[data-test-id=city] input").setValue("Краснодар");
+    public void shouldAcceptedAndRescheduled() {
+        $("[data-test-id=city] input").setValue(TestWithFaker.cityFake());
         $("[data-test-id=date] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=date] [placeholder='Дата встречи']").setValue(DateMeeting.dateInput(days));
-        $("[data-test-id=name] [name='name']").setValue("Валерий Градский");
-        $("[data-test-id=phone] [name='phone']").setValue("+79296969292");
+        $("[data-test-id=name] [name='name']").setValue(TestWithFaker.nameFake());
+        $("[data-test-id=phone] [name='phone']").setValue(TestWithFaker.phoneFake());
         $("[class=checkbox__box]").click();
         $(withText("Запланировать")).click();
         $(".notification__content").shouldBe(visible, Duration.ofSeconds(3))
                 .shouldHave(exactText("Встреча успешно запланирована на " + DateMeeting.dateInput(days)));
-    }
-
-    @Test
-    public void shouldRescheduled() {
-        $("[data-test-id=city] input").setValue("Краснодар");
         $("[data-test-id=date] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=date] [placeholder='Дата встречи']").setValue(DateMeeting.dateInputNext(daysNext));
-        $("[data-test-id=name] [name='name']").setValue("Валерий Градский");
-        $("[data-test-id=phone] [name='phone']").setValue("+79296969292");
-        $("[class=checkbox__box]").click();
         $(withText("Запланировать")).click();
         $(withText("Перепланировать?")).shouldBe(visible, Duration.ofSeconds(3));
         $$("button").find(exactText("Перепланировать")).click();
