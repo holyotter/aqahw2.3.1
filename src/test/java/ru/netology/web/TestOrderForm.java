@@ -14,8 +14,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class TestOrderForm {
 
-    public int days;
-    public int daysNext;
+    int days = 3;
 
     @BeforeEach
     void shouldPrepare(){
@@ -39,12 +38,13 @@ public class TestOrderForm {
         $(withText("Запланировать")).click();
         $(".notification__content").shouldBe(visible, Duration.ofSeconds(3))
                 .shouldHave(exactText("Встреча успешно запланирована на " + DateMeeting.dateInput(days)));
+        days = days + 2;
         $("[data-test-id=date] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id=date] [placeholder='Дата встречи']").setValue(DateMeeting.dateInputNext(daysNext));
+        $("[data-test-id=date] [placeholder='Дата встречи']").setValue(DateMeeting.dateInput(days));
         $(withText("Запланировать")).click();
         $(withText("Перепланировать?")).shouldBe(visible, Duration.ofSeconds(3));
         $$("button").find(exactText("Перепланировать")).click();
         $(".notification__content").shouldBe(visible, Duration.ofSeconds(3))
-                .shouldHave(exactText("Встреча успешно запланирована на " + DateMeeting.dateInputNext(daysNext)));
+                .shouldHave(exactText("Встреча успешно запланирована на " + DateMeeting.dateInput(days)));
     }
 }
